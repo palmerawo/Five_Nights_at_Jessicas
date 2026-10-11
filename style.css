@@ -1,0 +1,3404 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --purple: #bd5cff;
+  --violet: #8b2be2;
+  --white: #eee3ff;
+  --dark: #080511;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: #05030b;
+  color: var(--white);
+}
+
+body {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+}
+
+button {
+  font-family: inherit;
+}
+
+.game {
+  height: 100vh;
+  min-height: 570px;
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  background: var(--dark);
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: -5;
+  background: url('assets/pizzeria-pixelart.png') center / cover no-repeat;
+  animation: none !important;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: -4;
+  background: radial-gradient(
+    ellipse,
+    transparent 10%,
+    #05020b66 70%,
+    #000b 100%
+  );
+  pointer-events: none;
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  opacity: .18;
+  background: repeating-linear-gradient(
+    transparent 0 3px,
+    #0008 4px 5px
+  );
+}
+
+.static {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  opacity: 0;
+  pointer-events: none;
+  background: repeating-radial-gradient(
+    circle at 20% 30%,
+    #fff 0 1px,
+    transparent 1px 4px
+  );
+  mix-blend-mode: screen;
+}
+
+.hud {
+  position: absolute;
+  z-index: 12;
+  top: 18px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: space-between;
+  font-size: clamp(7px, .8vw, 11px);
+  line-height: 1.9;
+  color: #d5c3f5;
+  text-shadow: 0 0 8px #a25aff;
+  pointer-events: none;
+}
+
+.hud div:last-child {
+  text-align: right;
+}
+
+.hud span {
+  color: #b7a0dc;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+
+.scene.active {
+  display: block;
+}
+
+/* MENÚ PRINCIPAL */
+
+.title-panel {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 49%;
+  transform: translate(-50%, -50%);
+  width: min(500px, 47vw);
+  padding: 20px 24px;
+  text-align: center;
+  background: #080313d9;
+  border: 1px solid #bf5cff70;
+  box-shadow: 0 0 36px #0008;
+}
+
+.eyebrow {
+  color: #c3a4ed;
+  font-size: clamp(6px, .68vw, 9px);
+  line-height: 1.8;
+}
+
+h1 {
+  margin: 13px 0 0;
+  font-size: clamp(21px, 3.2vw, 43px);
+  line-height: 1.18;
+  color: #d7b7ff;
+  text-shadow: 3px 3px #34105c, 0 0 18px #ad47ff;
+}
+
+h1 span {
+  color: #b33dff;
+  font-size: 1.18em;
+  text-shadow: 4px 4px #350850, 0 0 22px #b33dff;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 12px auto 14px;
+  color: #f27aff;
+  font-size: 23px;
+  text-shadow: 0 0 13px #d44cff;
+}
+
+.divider i {
+  height: 2px;
+  width: 31%;
+  background: #b64dff;
+  box-shadow: 0 0 8px #b64dff;
+}
+
+.subtitle {
+  font-size: clamp(8px, .86vw, 12px);
+  line-height: 1.8;
+  margin: 0 0 22px;
+}
+
+.menu {
+  display: block;
+  width: min(290px, 100%);
+  margin: 4px auto;
+  padding: 12px 10px;
+  border: 2px solid transparent;
+  background: transparent;
+  color: #a99abf;
+  font: inherit;
+  font-size: clamp(9px, 1vw, 13px);
+  cursor: pointer;
+}
+
+.menu:hover,
+.menu.selected {
+  color: white;
+  border-color: #bf50ff;
+  background: #44116777;
+  box-shadow: 0 0 14px #b041ff80;
+}
+
+.footer {
+  position: absolute;
+  z-index: 4;
+  bottom: 18px;
+  color: #c5a7e8;
+  font-size: clamp(7px, .75vw, 10px);
+  line-height: 1.9;
+}
+
+.left {
+  left: 24px;
+}
+
+.right {
+  right: 24px;
+  color: #e5a2ff;
+}
+
+.right b {
+  color: #ed45ff;
+}
+
+/* SILUETA DEL MENÚ */
+
+.shadow-bonnie {
+  display: block;
+  position: absolute;
+  right: -2%;
+  top: 5%;
+  height: 88%;
+  width: 22%;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 18px #7624ff88);
+  pointer-events: none;
+}
+
+.shadow-bonnie > i {
+  position: absolute;
+  top: 0;
+  width: 25%;
+  height: 43%;
+  background: #21113e;
+  border: 5px solid #30135b;
+  border-radius: 50% 50% 12% 12%;
+}
+
+.shadow-bonnie > i:first-child {
+  left: 15%;
+  transform: rotate(-8deg);
+}
+
+.shadow-bonnie > i:nth-child(2) {
+  right: 12%;
+  height: 36%;
+  transform: rotate(13deg);
+}
+
+.shadow-face {
+  position: absolute;
+  top: 26%;
+  left: 8%;
+  width: 83%;
+  height: 36%;
+  background: #251443;
+  border: 6px solid #361760;
+  border-radius: 42%;
+}
+
+.shadow-face b {
+  position: absolute;
+  top: 35%;
+  left: 22%;
+  width: 14%;
+  height: 11%;
+  border-radius: 50%;
+  background: #b94aff;
+  box-shadow: 0 0 14px #bd4dff;
+}
+
+.shadow-face b:nth-child(2) {
+  left: 62%;
+}
+
+.shadow-face span {
+  position: absolute;
+  left: 32%;
+  top: 54%;
+  width: 37%;
+  height: 25%;
+  border-radius: 45%;
+  background: #3a2454;
+}
+
+.shadow-body {
+  position: absolute;
+  top: 59%;
+  left: 17%;
+  width: 68%;
+  height: 45%;
+  background: #1a0d30;
+  border: 5px solid #2b1450;
+  border-radius: 40% 40% 0 0;
+}
+
+/* INTERFERENCIA */
+
+.glitch {
+  z-index: 5;
+  align-items: center;
+  justify-content: center;
+  background: #020008e8;
+}
+
+.glitch.active {
+  display: flex;
+}
+
+.glitch div {
+  text-align: center;
+  font-size: clamp(12px, 2vw, 24px);
+  line-height: 2;
+  text-shadow: 3px 0 #f04aff, -3px 0 #3be8ff;
+  animation: none !important;
+}
+
+.glitch small {
+  font-size: .58em;
+  color: #b89acb;
+}
+
+body.glitching .static {
+  opacity: .8;
+  animation: noise .12s steps(2, end) 7;
+}
+
+/* ESCENA DE BONNIE */
+
+.bonnie-scene {
+  z-index: 6;
+  background: #03010b35;
+  overflow: hidden;
+}
+
+.frame {
+  position: absolute;
+  inset: 8% 5% 15%;
+  border: 1px solid #c991ff55;
+  box-shadow: inset 0 0 60px #07030d;
+  pointer-events: none;
+}
+
+.frame span {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  font-size: clamp(6px, .7vw, 9px);
+  color: #d9baff;
+}
+
+.bonnie.bonnie-image {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  width: min(900px, 88vw);
+  height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateX(-50%) scale(.3);
+  filter: drop-shadow(0 0 20px #9131ff80);
+  transform-origin: center center;
+}
+
+.bonnie-sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 0 10px #b64bff55);
+}
+
+/* ENTRADA Y CAMBIOS DE ENCUADRE */
+
+.bonnie-scene.active .bonnie-image {
+  animation: bonnieAppear .9s ease-out forwards;
+}
+
+.bonnie-scene.stage-approach .bonnie-image {
+  animation: bonnieApproach .65s ease-out forwards;
+}
+
+.bonnie-scene.stage-guitar .bonnie-image {
+  animation: bonnieGuitarScene .65s ease-out forwards;
+}
+
+.bonnie-scene.stage-closeup .bonnie-image {
+  animation: bonnieCloseup .65s ease-out forwards;
+}
+
+@keyframes bonnieAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(.55);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes bonnieApproach {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.12);
+  }
+}
+
+@keyframes bonnieGuitarScene {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+@keyframes bonnieCloseup {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.3);
+  }
+}
+
+/* BARRA DE DIÁLOGO CON RETRATO */
+
+.bonnie-scene.active .dialogue {
+  position: absolute;
+  z-index: 15;
+  left: 50%;
+  bottom: 3%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  width: min(1000px, 92vw);
+  min-height: 118px;
+  max-height: 30vh;
+  overflow-y: auto;
+  padding: 12px 16px;
+  background: rgba(5, 2, 15, .97);
+  border: 2px solid #d14cff;
+  box-shadow: 0 0 0 3px #210a36, 0 0 22px #a73dff55;
+}
+
+.dialogue-portrait {
+  width: 82px;
+  height: 90px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialogue-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 0 5px #b64bff88);
+}
+
+.dialogue-content {
+  min-width: 0;
+}
+
+.dialogue-content .speaker {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #bf70ff66;
+  color: #e6cfff;
+  font-size: 10px;
+}
+
+.dialogue-content .speaker span {
+  color: #a78bc4;
+  font-size: 7px;
+}
+
+.dialogue-content p {
+  min-height: 32px;
+  margin: 10px 0 5px;
+  color: #f4eaff;
+  font: 16px/1.5 'Courier New', monospace;
+  white-space: pre-wrap;
+}
+
+.dialogue-content button {
+  display: none;
+  float: right;
+  padding: 5px 10px;
+  border: 0;
+  background: transparent;
+  color: #f0b5ff;
+  font: 16px monospace;
+  cursor: pointer;
+}
+
+.dialogue-content button.visible {
+  display: block;
+}
+
+/* SIGUIENTE PANTALLA */
+
+.next-scene {
+  z-index: 7;
+  align-items: center;
+  justify-content: center;
+  background: #05020ee8;
+}
+
+.next-scene.active {
+  display: flex;
+}
+
+.next-card,
+.modal-card {
+  width: min(650px, 88vw);
+  padding: 30px;
+  text-align: center;
+  border: 1px solid #a64df3;
+  background: #080314f5;
+  box-shadow: 0 0 30px #4b176e;
+}
+
+.next-card h2 {
+  font-size: clamp(20px, 3vw, 36px);
+  line-height: 1.6;
+  text-shadow: 0 0 14px #a944ff;
+}
+
+.next-card h2 span {
+  color: #bd68ff;
+}
+
+.next-card p:not(.eyebrow),
+.modal-card p:not(.eyebrow) {
+  font: 18px/1.6 'Courier New', monospace;
+}
+
+.next-card button,
+.modal-card #okay {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border: 2px solid #c05aff;
+  color: white;
+  background: #2b1044;
+  font: 10px 'Press Start 2P', monospace;
+  cursor: pointer;
+}
+
+/* OPCIONES */
+
+.modal {
+  position: absolute;
+  z-index: 20;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #000b;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-card {
+  position: relative;
+  width: min(460px, 90vw);
+}
+
+.modal-card #close {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  background: none;
+  border: 0;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.modal-card h2 {
+  font-size: 20px;
+}
+
+.modal-card label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  font-size: 8px;
+  line-height: 1.7;
+}
+
+.toast {
+  position: absolute;
+  z-index: 30;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  max-width: 90%;
+  padding: 12px 16px;
+  background: #0b0618;
+  border: 1px solid #bc5bff;
+  font-size: 9px;
+  text-align: center;
+}
+
+.toast.show {
+  display: block;
+}
+
+@keyframes noise {
+  50% { opacity: .9; }
+  100% { opacity: .15; }
+}
+
+/* PANTALLAS PEQUEÑAS */
+
+@media (max-width: 700px) {
+  .game {
+    min-height: 620px;
+  }
+
+  .hud {
+    top: 13px;
+    left: 13px;
+    right: 13px;
+    font-size: 7px;
+  }
+
+  .title-panel {
+    width: 90vw;
+    padding: 17px 12px 20px;
+    background: #05020fdf;
+  }
+
+  h1 {
+    font-size: clamp(21px, 6.2vw, 34px);
+  }
+
+  h1 span {
+    font-size: 1.14em;
+  }
+
+  .subtitle {
+    font-size: 9px;
+  }
+
+  .shadow-bonnie {
+    right: -9%;
+    width: 28%;
+    opacity: .5;
+  }
+
+  .footer {
+    bottom: 10px;
+    font-size: 7px;
+  }
+
+  .left {
+    left: 12px;
+  }
+
+  .right {
+    right: 12px;
+  }
+
+  .bonnie.bonnie-image {
+    width: 100vw;
+    height: 76vh;
+    top: 0;
+  }
+
+  .frame {
+    inset: 7% 3% 23%;
+  }
+
+  .bonnie-scene.active .dialogue {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 8px;
+    width: 94vw;
+    min-height: 112px;
+    max-height: 30vh;
+    padding: 10px;
+    bottom: 2%;
+  }
+
+  .dialogue-portrait {
+    width: 58px;
+    height: 70px;
+  }
+
+  .dialogue-content .speaker {
+    font-size: 8px;
+  }
+
+  .dialogue-content p {
+    font-size: 14px;
+  }
+
+  .next-card {
+    padding: 22px 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* =========================================
+   ESCENAS A PANTALLA COMPLETA
+   FIVE NIGHTS AT JESSICA'S
+   ========================================= */
+
+/* SIGNAL LOST: mostrar la imagen completa */
+#glitch.glitch {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #020008;
+  z-index: 12;
+}
+
+#glitch.glitch.active {
+  display: block;
+}
+
+.signal-lost-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Evitar que el texto antiguo tape la imagen */
+#glitch.glitch > div {
+  display: none;
+}
+
+/* Bonnie: cada pose ocupa toda la pantalla */
+#bonnieScene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #03010b;
+}
+
+#bonnieScene .frame {
+  z-index: 3;
+  pointer-events: none;
+}
+
+#bonnieScene .bonnie.bonnie-image {
+  position: absolute;
+  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 1;
+  transform: none;
+  filter: none;
+  z-index: 1;
+  animation: none !important;
+}
+
+#bonnieScene .bonnie-sprite {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  image-rendering: auto;
+  filter: none;
+  animation: none !important;
+}
+
+/* Las poses cambian de imagen, no el tamaño de la pantalla */
+#bonnieScene.stage-approach .bonnie-image,
+#bonnieScene.stage-guitar .bonnie-image,
+#bonnieScene.stage-point .bonnie-image,
+#bonnieScene.stage-closeup .bonnie-image,
+#bonnieScene.stage-wink .bonnie-image {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Barra de diálogo por encima de las imágenes */
+#bonnieScene .dialogue {
+  z-index: 10;
+  left: 50%;
+  bottom: 3%;
+  width: min(1000px, 92vw);
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+/* Retrato pequeño dentro de la barra */
+#bonnieScene .dialogue-portrait {
+  overflow: hidden;
+  background: #090313;
+}
+
+#bonnieScene .dialogue-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  image-rendering: auto;
+}
+
+/* En móviles */
+@media (max-width: 700px) {
+  #bonnieScene .bonnie-sprite,
+  .signal-lost-image {
+    object-fit: cover;
+  }
+
+  #bonnieScene .dialogue {
+    bottom: 2%;
+    width: 94vw;
+    max-height: 32vh;
+  }
+}
+
+/* SIGNAL LOST: imagen + interferencia animada */
+#glitch.glitch {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #020008;
+  z-index: 12;
+}
+
+#glitch.glitch.active {
+  display: block;
+}
+
+.signal-lost-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  filter: brightness(.8) contrast(1.15);
+}
+
+/* Líneas de interferencia */
+#glitch.glitch::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(190, 80, 255, .3) 4px,
+    rgba(0, 0, 0, .75) 5px
+  );
+  animation: signalLines .16s steps(2, end) infinite;
+}
+
+/* Destellos y distorsión */
+#glitch.glitch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    transparent 35%,
+    rgba(180, 55, 255, .25) 45%,
+    rgba(0, 0, 0, .7) 49%,
+    transparent 56%
+  );
+  background-size: 100% 220%;
+  animation: signalSweep .8s linear infinite,
+             signalFlicker .12s steps(2, end) infinite;
+}
+
+@keyframes signalLines {
+  0% { transform: translateY(0); opacity: .8; }
+  50% { transform: translateY(3px); opacity: 1; }
+  100% { transform: translateY(-2px); opacity: .7; }
+}
+
+@keyframes signalSweep {
+  from { background-position: 0 -220%; }
+  to { background-position: 0 220%; }
+}
+
+@keyframes signalFlicker {
+  0%, 100% { opacity: .8; }
+  50% { opacity: .35; }
+}
+
+/* Breve destello al comenzar la señal */
+body.glitching #glitch.glitch.active .signal-lost-image {
+  animation: signalImageFlash 1.35s steps(2, end) forwards;
+}
+
+@keyframes signalImageFlash {
+  0%, 15%, 35%, 60% {
+    opacity: .25;
+    filter: brightness(1.8) contrast(1.5);
+  }
+  10%, 25%, 50%, 100% {
+    opacity: 1;
+    filter: brightness(.8) contrast(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #glitch.glitch::before,
+  #glitch.glitch::after,
+  .signal-lost-image {
+    animation: none !important;
+  }
+}
+
+/* === CORRECCIÓN DEL CUADRO DE DIÁLOGO === */
+
+.dialogue {
+  background: rgba(8, 3, 20, 0.97) !important;
+  border: 2px solid #bd43ff !important;
+  box-shadow: 0 0 14px rgba(189, 67, 255, 0.45);
+  color: #fff !important;
+  z-index: 20;
+}
+
+.dialogue-content {
+  color: #fff !important;
+}
+
+#dialogueText {
+  color: #fff !important;
+  font-size: 16px !important;
+  line-height: 1.5;
+  text-shadow: 0 0 5px #bd43ff;
+  opacity: 1 !important;
+  min-height: 24px;
+}
+
+.dialogue-portrait {
+  overflow: hidden;
+  background: #160827;
+}
+
+.dialogue-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.speaker b {
+  color: #e5a5ff !important;
+}
+
+
+
+/* ===== FNAF: DIGITAL CAMERA CORRUPTION ===== */
+
+#bonnieScene .camera-glitch-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 1;
+  background: transparent;
+}
+
+/* Cortes horizontales duros, sin efecto de cortina */
+#bonnieScene .camera-glitch-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 17px,
+    #d5b5ff 18px,
+    #160020 20px,
+    transparent 22px,
+    transparent 31px
+  );
+  opacity: 0;
+  mix-blend-mode: normal;
+  animation: hardSignalCuts 0.42s steps(1, end) forwards;
+}
+
+/* Bloques digitales desplazados */
+#bonnieScene .camera-glitch-overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 34px,
+    #ff164f 35px,
+    #00eaff 38px,
+    transparent 42px,
+    transparent 57px
+  );
+  opacity: 0;
+  animation: rgbDataBreak 0.42s steps(1, end) forwards;
+}
+
+/* Desplazar segmentos de la imagen de Bonnie */
+#bonnieScene.camera-glitch .bonnie-sprite {
+  animation: hardBonnieDistortion 0.42s steps(1, end);
+}
+
+/* Sacudida de la cámara completa */
+#bonnieScene.camera-glitch {
+  animation: cameraImpact 0.42s steps(2, end);
+}
+
+/* Cortes duros en diferentes zonas */
+@keyframes hardSignalCuts {
+  0%, 100% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    transform: translateX(0);
+  }
+  8% {
+    opacity: 1;
+    clip-path: inset(13% 0 78% 0);
+    transform: translateX(-22px);
+  }
+  17% {
+    opacity: 1;
+    clip-path: inset(42% 0 48% 0);
+    transform: translateX(27px);
+  }
+  29% {
+    opacity: 1;
+    clip-path: inset(69% 0 22% 0);
+    transform: translateX(-35px);
+  }
+  43% {
+    opacity: 1;
+    clip-path: inset(24% 0 69% 0);
+    transform: translateX(19px);
+  }
+  57% {
+    opacity: 1;
+    clip-path: inset(52% 0 37% 0);
+    transform: translateX(-28px);
+  }
+  72% {
+    opacity: 1;
+    clip-path: inset(82% 0 9% 0);
+    transform: translateX(32px);
+  }
+  86% {
+    opacity: 1;
+    clip-path: inset(34% 0 57% 0);
+    transform: translateX(-12px);
+  }
+}
+
+/* Franjas RGB que saltan de lado a lado */
+@keyframes rgbDataBreak {
+  0%, 100% {
+    opacity: 0;
+    transform: translateX(0);
+    clip-path: inset(0 0 100% 0);
+  }
+  12% {
+    opacity: 1;
+    transform: translateX(24px);
+    clip-path: inset(19% 0 72% 0);
+  }
+  25% {
+    opacity: 1;
+    transform: translateX(-31px);
+    clip-path: inset(48% 0 43% 0);
+  }
+  39% {
+    opacity: 1;
+    transform: translateX(38px);
+    clip-path: inset(75% 0 16% 0);
+  }
+  53% {
+    opacity: 1;
+    transform: translateX(-17px);
+    clip-path: inset(31% 0 60% 0);
+  }
+  68% {
+    opacity: 1;
+    transform: translateX(29px);
+    clip-path: inset(59% 0 32% 0);
+  }
+  82% {
+    opacity: 1;
+    transform: translateX(-25px);
+    clip-path: inset(8% 0 83% 0);
+  }
+}
+
+/* Bonnie se descompone durante unos fotogramas */
+@keyframes hardBonnieDistortion {
+  0%, 100% {
+    transform: translate(0, 0);
+    filter: none;
+  }
+  10% {
+    transform: translate(-12px, 1px) skewX(-4deg);
+    filter: drop-shadow(7px 0 #ff164f)
+            drop-shadow(-7px 0 #00eaff);
+    clip-path: inset(8% 0 72% 0);
+  }
+  22% {
+    transform: translate(9px, -2px) skewX(5deg);
+    filter: contrast(2.5) brightness(1.4);
+    clip-path: inset(35% 0 43% 0);
+  }
+  36% {
+    transform: translate(-15px, 0) skewX(-7deg);
+    filter: drop-shadow(8px 0 #00eaff)
+            drop-shadow(-8px 0 #ff164f);
+    clip-path: inset(64% 0 19% 0);
+  }
+  49% {
+    transform: translate(11px, 2px);
+    filter: contrast(2) brightness(0.65);
+    clip-path: inset(17% 0 67% 0);
+  }
+  63% {
+    transform: translate(-7px, -1px) skewX(3deg);
+    filter: drop-shadow(6px 0 #ff164f)
+            drop-shadow(-6px 0 #00eaff);
+    clip-path: inset(45% 0 39% 0);
+  }
+  79% {
+    transform: translate(5px, 0);
+    filter: contrast(1.8) brightness(1.3);
+    clip-path: inset(76% 0 8% 0);
+  }
+}
+
+/* Golpe seco de cámara */
+@keyframes cameraImpact {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  15% {
+    transform: translate(-3px, 1px);
+  }
+  30% {
+    transform: translate(4px, -1px);
+  }
+  55% {
+    transform: translate(-2px, 0);
+  }
+  75% {
+    transform: translate(2px, 1px);
+  }
+}
+
+/* === FINAL DE LA PRIMERA NOCHE === */
+
+.next-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #020103;
+  color: #f5eaff;
+}
+
+.ending-glitch {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(190, 65, 255, 0.18) 4px,
+    transparent 5px
+  );
+  animation: endingFlicker 0.15s steps(2, end) infinite;
+}
+
+.ending-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  text-align: center;
+  animation: endingAppear 1.2s ease-out both;
+}
+
+.ending-label {
+  color: #a85be8;
+  font-size: 11px;
+  letter-spacing: 4px;
+}
+
+.ending-content h2 {
+  color: #f7eaff;
+  font-size: clamp(24px, 5vw, 46px);
+  letter-spacing: 5px;
+  text-shadow: 3px 0 #8e24aa, -3px 0 #3e1459;
+}
+
+.ending-content p:not(.ending-label) {
+  max-width: 520px;
+  color: #c8b9d4;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.ending-cursor {
+  margin-top: 18px;
+  color: #c36bff;
+  animation: cursorBlink 0.7s steps(2, end) infinite;
+}
+
+.ending-footer {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: #78558b;
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+@keyframes endingFlicker {
+  0% { opacity: 0.15; }
+  50% { opacity: 0.5; }
+  100% { opacity: 0.25; }
+}
+
+@keyframes endingAppear {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes cursorBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* ===== JESSICA'S WORLD: PIXEL ART ===== */
+
+
+.jessica-world {
+  background-image: url("assets/jessica-world.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: #f8efff;
+  background: #10162f;
+  font-family: monospace;
+  image-rendering: pixelated;
+}
+
+.pixel-sky {
+  position: absolute;
+  inset: 0 0 30%;
+  background: linear-gradient(#11132f 0%, #27345c 65%, #596a87 100%);
+}
+
+.pixel-star {
+  position: absolute;
+  color: #dce7ff;
+  font-size: 22px;
+  animation: starTwinkle 2s steps(2, end) infinite;
+}
+
+.star-one { left: 12%; top: 15%; }
+.star-two { left: 28%; top: 29%; animation-delay: .5s; }
+.star-three { right: 18%; top: 14%; animation-delay: .8s; }
+.star-four { right: 34%; top: 27%; animation-delay: 1.1s; }
+
+.pixel-moon {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  top: 12%;
+  right: 13%;
+  background: #d9e6ff;
+  box-shadow:
+    8px 0 #d9e6ff,
+    -8px 0 #d9e6ff,
+    0 8px #d9e6ff,
+    0 -8px #d9e6ff,
+    0 0 35px #8aaeff;
+}
+
+.world-heading {
+  position: absolute;
+  z-index: 3;
+  top: 7%;
+  width: 100%;
+  padding: 0 16px;
+  text-align: center;
+  text-shadow: 3px 3px #17203d;
+}
+
+.world-heading p {
+  color: #b9d4ff;
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+.world-heading h2 {
+  font-size: clamp(19px, 4vw, 34px);
+  line-height: 1.4;
+  color: #fff0fa;
+}
+
+.world-heading span {
+  font-size: 12px;
+  color: #d5e1ff;
+}
+
+.pixel-hills {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  bottom: 26%;
+  height: 34%;
+  background:
+    linear-gradient(135deg, transparent 35%, #273d51 36% 65%, transparent 66%)
+      0 0 / 180px 100% repeat-x,
+    linear-gradient(#293e4c, #203947);
+  clip-path: polygon(
+    0 60%, 12% 25%, 24% 58%, 38% 12%,
+    51% 56%, 68% 20%, 82% 57%, 100% 28%,
+    100% 100%, 0 100%
+  );
+}
+
+.pixel-garden {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.pixel-garden::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 34%;
+  background: repeating-linear-gradient(
+    90deg,
+    #315b49 0 32px,
+    #37664c 32px 64px
+  );
+  border-top: 8px solid #527a54;
+}
+
+.pixel-path {
+  position: absolute;
+  bottom: -8%;
+  left: 50%;
+  width: 24%;
+  height: 42%;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(
+    to bottom,
+    #a88b79 0 24px,
+    #826b66 24px 48px
+  );
+  clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
+  border-left: 4px solid #d1ae9a;
+  border-right: 4px solid #d1ae9a;
+}
+
+
+.pixel-heart {
+  position: absolute;
+  z-index: 4;
+  bottom: 24%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 66px;
+  height: 60px;
+  border: 4px solid #f8d9ff;
+  border-radius: 0;
+  background: #8f4bc5;
+  color: white;
+  font-size: 35px;
+  cursor: pointer;
+  box-shadow: 0 0 0 4px #462a75, 0 0 25px #ca8dff;
+  animation: heartPulse 1.5s steps(2, end) infinite;
+}
+
+.pixel-heart:hover {
+  background: #bd70ed;
+  transform: translateX(-50%) scale(1.1);
+}
+
+.heart-hint {
+  position: absolute;
+  z-index: 4;
+  bottom: 17%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #fff0ff;
+  text-shadow: 2px 2px #26304b;
+}
+
+.world-footer {
+  position: absolute;
+  z-index: 5;
+  bottom: 12px;
+  width: 100%;
+  text-align: center;
+  color: #c8d9f5;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.love-message {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(13, 15, 42, .96);
+}
+
+.love-message.open {
+  display: flex;
+  animation: loveReveal .8s ease-out both;
+}
+
+.love-message p {
+  color: #a9c9ff;
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+.love-message h3 {
+  color: #fff0ff;
+  font-size: clamp(40px, 8vw, 72px);
+  text-shadow: 4px 4px #62428d, 0 0 30px #ad81ff;
+}
+
+.love-message span {
+  max-width: 420px;
+  line-height: 1.8;
+  color: #e3dcff;
+}
+
+.love-message button {
+  margin-top: 16px;
+  padding: 12px 18px;
+  color: white;
+  background: #60448e;
+  border: 2px solid #d4b3ff;
+  cursor: pointer;
+  font-family: monospace;
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: .45; }
+  50% { opacity: 1; }
+}
+
+@keyframes heartPulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.4); }
+}
+
+@keyframes loveReveal {
+  from { opacity: 0; transform: scale(.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+
+
+
+
+/* ===== TARJETAS DE JESSICA: CUATRO MARCOS ===== */
+
+#jessicaWorld .jessica-cards {
+  position: absolute;
+  z-index: 12;
+
+  top: 64%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 78%;
+  max-width: 1120px;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 18px;
+  row-gap: 20px;
+
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#jessicaWorld .jessica-card {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 190px;
+  min-height: 0;
+  margin: 0;
+  padding: 16px 8px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  color: #f8efff;
+  background: rgba(13, 17, 48, .18);
+  border: 2px solid rgba(184, 160, 255, .9);
+  outline: none;
+  box-shadow: 0 0 12px rgba(133, 110, 255, .12);
+
+  font-family: monospace;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease,
+              box-shadow .15s ease;
+}
+
+#jessicaWorld .jessica-card:hover,
+#jessicaWorld .jessica-card:focus-visible {
+  transform: translateY(-4px);
+  background: rgba(49, 47, 103, .55);
+  box-shadow: 0 0 20px rgba(170, 145, 255, .5);
+}
+
+#jessicaWorld .jessica-card .card-icon {
+  font-size: clamp(24px, 2vw, 34px);
+  line-height: 1.2;
+}
+
+#jessicaWorld .jessica-card .card-title {
+  font-size: clamp(10px, .9vw, 13px);
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+#jessicaWorld .jessica-card .card-subtitle {
+  font-size: clamp(8px, .7vw, 10px);
+  color: #ded8f7;
+  text-align: center;
+}
+
+/* Ventana que aparece al pulsar una tarjeta */
+#jessicaWorld .card-popup {
+  display: none;
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  top: 65%;
+  transform: translateX(-50%);
+  width: min(88%, 540px);
+  padding: 24px;
+  box-sizing: border-box;
+  text-align: center;
+  color: #f8efff;
+  background: rgba(11, 13, 39, .98);
+  border: 3px solid #bba5ff;
+  box-shadow: 0 0 0 5px rgba(42, 32, 76, .9),
+              0 0 35px rgba(151, 118, 255, .45);
+}
+
+#jessicaWorld .card-popup.open {
+  display: block;
+  animation: loveReveal .25s steps(3, end) both;
+}
+
+#jessicaWorld .card-popup #popupLabel {
+  color: #bba5ff;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+#jessicaWorld .card-popup h3 {
+  margin: 12px 0;
+  font-size: clamp(20px, 4vw, 30px);
+  color: #fff;
+}
+
+#jessicaWorld .card-popup #popupText {
+  line-height: 1.8;
+  color: #ded8f7;
+}
+
+#jessicaWorld .popup-close {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  color: white;
+  background: transparent;
+  border: 0;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 650px) {
+  #jessicaWorld .jessica-cards {
+    top: 55%;
+    width: 94%;
+    column-gap: 6px;
+    row-gap: 8px;
+  }
+
+  #jessicaWorld .jessica-card {
+    height: 112px;
+    padding: 8px 2px;
+    border-width: 1px;
+    gap: 6px;
+  }
+
+  #jessicaWorld .jessica-card .card-subtitle {
+    display: none;
+  }
+
+  #jessicaWorld .card-popup {
+    top: 53%;
+  }
+}
+
+
+/* ===== FONDO REAL DEL MUNDO DE JESSICA ===== */
+
+#jessicaWorld {
+  background: #10162f !important;
+  isolation: isolate;
+}
+
+#jessicaWorld .jessica-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+/* Ocultar el paisaje antiguo generado con CSS */
+#jessicaWorld .pixel-sky,
+#jessicaWorld .pixel-hills {
+  display: none !important;
+}
+
+#jessicaWorld .pixel-garden {
+  background: transparent !important;
+}
+
+#jessicaWorld .pixel-garden::before,
+#jessicaWorld .pixel-garden::after,
+#jessicaWorld .pixel-path {
+  display: none !important;
+}
+
+/* Mantener los recuadros por encima de la imagen */
+#jessicaWorld .world-heading,
+#jessicaWorld .jessica-cards,
+#jessicaWorld .card-popup,
+#jessicaWorld .world-footer,
+#jessicaWorld #heartReveal,
+#jessicaWorld .heart-hint,
+#jessicaWorld .love-message {
+  z-index: 5;
+}
+
+/* ===== NARRACIÓN DE LA HISTORIA J&L ===== */
+
+
+.story-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      rgba(7, 8, 32, 0.12),
+      rgba(7, 8, 32, 0.22)
+    ),
+    url("assets/story-night.png") center center / cover no-repeat;
+  color: #f8f0ff;
+  text-align: center;
+  transition: opacity 1s ease, visibility 1s ease;
+}
+
+.story-intro.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.story-text {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 680px);
+  padding: 24px;
+  background: rgba(9, 10, 38, 0.30);
+  border: 1px solid rgba(190, 164, 255, 0.18);
+  box-shadow: 0 0 40px rgba(15, 15, 65, 0.15);
+  backdrop-filter: blur(2px);
+}
+
+.story-eyebrow {
+  color: #c4caff;
+  text-shadow: 0 0 12px #777dff;
+  letter-spacing: 4px;
+}
+
+.story-line {
+  color: #fff4ff;
+  text-shadow: 2px 2px 5px #10102e, 0 0 12px #393a81;
+}
+
+.story-distance {
+  color: #c5d5ff;
+  font-size: clamp(32px, 6vw, 52px);
+  font-weight: bold;
+  text-shadow: 0 0 18px #779dff, 2px 2px #17153c;
+}
+
+.story-ending {
+  line-height: 1.9;
+}
+
+#storyContinue {
+  padding: 14px 28px;
+  color: #fff;
+  background: rgba(42, 38, 93, 0.92);
+  border: 2px solid #c4adff;
+  box-shadow: 0 0 18px rgba(166, 135, 255, 0.45);
+  font-family: monospace;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+#storyContinue:hover {
+  background: #6550a5;
+  box-shadow: 0 0 28px #a98aff;
+}
+
+.story-text {
+  transition: opacity .4s ease, transform .4s ease;
+}
+
+.story-text.story-changing {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.story-text .story-line {
+  animation: storyFadeIn 1s ease both;
+}
+
+.story-text .story-distance {
+  animation-delay: .5s;
+}
+
+.story-text #storyContinue {
+  margin-top: 28px;
+  animation: storyFadeIn .8s ease 1.2s both;
+}
+
+/* ===== AJUSTE FINAL: TARJETAS SOBRE LOS MARCOS DEL FONDO ===== */
+
+#jessicaWorld .jessica-cards {
+  position: absolute !important;
+  top: 64% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+
+  /* Ancho y posición del conjunto */
+  width: 65% !important;
+  max-width: none !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  column-gap: 12px !important;
+  row-gap: 0 !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 12 !important;
+  box-sizing: border-box !important;
+}
+
+#jessicaWorld .jessica-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 145px !important;
+  min-height: 145px !important;
+  margin: 0 !important;
+  padding: 12px 5px !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+
+  /* Los marcos ya están dibujados en el fondo */
+  background: transparent !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+
+  box-sizing: border-box !important;
+  cursor: pointer;
+}
+
+#jessicaWorld .jessica-card:hover,
+#jessicaWorld .jessica-card:focus-visible {
+  transform: translateY(-4px);
+  background: rgba(150, 110, 255, .12) !important;
+  box-shadow: none !important;
+}
+
+#jessicaWorld .jessica-card .card-icon {
+  font-size: clamp(24px, 2vw, 34px);
+}
+
+#jessicaWorld .jessica-card .card-title {
+  font-size: clamp(10px, .9vw, 13px);
+  text-align: center;
+}
+
+#jessicaWorld .jessica-card .card-subtitle {
+  font-size: clamp(8px, .7vw, 10px);
+  text-align: center;
+}
+
+/* Mantener el panel emergente visible */
+#jessicaWorld .card-popup {
+  z-index: 25 !important;
+}
+
+@media (max-width: 650px) {
+  #jessicaWorld .jessica-cards {
+    top: 60% !important;
+    width: 88% !important;
+    column-gap: 4px !important;
+  }
+
+  #jessicaWorld .jessica-card {
+    height: 110px !important;
+    min-height: 110px !important;
+    padding: 5px 2px !important;
+    gap: 5px !important;
+  }
+
+  #jessicaWorld .jessica-card .card-subtitle {
+    display: none !important;
+  }
+}
+
+/* ===== AJUSTES FINALES DEL MUNDO DE JESSICA ===== */
+
+/* Dar más espacio vertical al contenido de las tarjetas */
+#jessicaWorld .jessica-card {
+  padding: 18px 8px !important;
+  gap: 12px !important;
+}
+
+/* Iconos un poco más grandes */
+#jessicaWorld .jessica-card .card-icon {
+  font-size: clamp(30px, 2.5vw, 40px) !important;
+  line-height: 1.2;
+}
+
+/* Nombres más grandes y visibles */
+#jessicaWorld .jessica-card .card-title {
+  font-size: clamp(13px, 1.1vw, 17px) !important;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 8px rgba(196, 166, 255, .75);
+}
+
+/* Descripciones más legibles */
+#jessicaWorld .jessica-card .card-subtitle {
+  font-size: clamp(10px, .85vw, 13px) !important;
+  line-height: 1.5;
+  color: #f0eaff !important;
+  text-shadow: 0 0 6px rgba(190, 165, 255, .65);
+}
+
+/* Bajar el botón del corazón */
+#jessicaWorld #heartReveal {
+  top: 76% !important;
+}
+
+/* Bajar el texto debajo del corazón */
+#jessicaWorld .heart-hint {
+  top: 86% !important;
+  font-size: clamp(10px, .8vw, 13px) !important;
+  letter-spacing: 2px;
+  color: #ffffff !important;
+  text-shadow:
+    0 0 5px #c99cff,
+    0 0 12px #a66dff,
+    1px 1px 3px #17102d;
+  font-weight: bold;
+}
+
+/* Evitar que el corazón pierda protagonismo */
+#jessicaWorld #heartReveal {
+  font-size: 30px !important;
+  z-index: 15 !important;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 650px) {
+  #jessicaWorld .jessica-card .card-icon {
+    font-size: 25px !important;
+  }
+
+  #jessicaWorld .jessica-card .card-title {
+    font-size: 10px !important;
+    letter-spacing: 0;
+  }
+
+  #jessicaWorld .jessica-card .card-subtitle {
+    font-size: 9px !important;
+  }
+
+  #jessicaWorld #heartReveal {
+    top: 76% !important;
+  }
+
+  #jessicaWorld .heart-hint {
+    top: 86% !important;
+    font-size: 9px !important;
+    letter-spacing: 1px;
+  }
+}
+
+/* ===== OCULTAR LAS TARJETAS AL ABRIR EL MENSAJE FINAL ===== */
+
+#jessicaWorld #loveMessage {
+  z-index: 40 !important;
+}
+
+/* Cuando el mensaje está abierto, ocultar las tarjetas */
+#jessicaWorld:has(#loveMessage.open) .jessica-cards {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Ocultar también el botón del corazón y su texto */
+#jessicaWorld:has(#loveMessage.open) #heartReveal,
+#jessicaWorld:has(#loveMessage.open) .heart-hint {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Transición suave */
+#jessicaWorld .jessica-cards,
+#jessicaWorld #heartReveal,
+#jessicaWorld .heart-hint {
+  transition: opacity .35s ease, visibility .35s ease;
+}
+
+/* ===== CUARTO RECUADRO: NUESTRA FECHA ===== */
+
+#jessicaWorld .jessica-card-jl {
+  gap: 8px;
+}
+
+#jessicaWorld .jessica-card-jl .card-date {
+  color: #f4efff;
+  font-family: monospace;
+  font-size: clamp(30px, 3vw, 42px);
+  line-height: 1.1;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px rgba(190, 165, 255, .25);
+}
+
+#jessicaWorld .jessica-card-jl .card-title {
+  font-size: clamp(12px, 1vw, 15px);
+  letter-spacing: 3px;
+}
+
+#jessicaWorld .jessica-card-jl .card-subtitle {
+  font-size: clamp(9px, .75vw, 11px);
+  color: #aaa6bd;
+  letter-spacing: 1px;
+}
+
+/* ===== CORRECCIÓN FINAL: 4 TARJETAS ===== */
+
+#jessicaWorld .jessica-cards {
+  position: absolute;
+  z-index: 8;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 76%;
+  max-width: 1250px;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+
+  box-sizing: border-box;
+}
+
+/* Las cuatro tarjetas mantienen el mismo tamaño */
+#jessicaWorld .jessica-cards .jessica-card {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 190px;
+  min-height: 190px;
+  flex: initial;
+
+  padding: 18px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Iconos */
+#jessicaWorld .jessica-card .card-icon {
+  display: block;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+/* Nombres */
+#jessicaWorld .jessica-card .card-title {
+  display: block;
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* Descripciones */
+#jessicaWorld .jessica-card .card-subtitle {
+  display: block;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Fecha del cuarto recuadro */
+#jessicaWorld .jessica-card-jl .card-date {
+  display: block;
+  font-size: 38px;
+  line-height: 1.15;
+  text-align: center;
+}
+
+/* Evitar que el corazón de la escena se confunda con las tarjetas */
+#jessicaWorld #heartReveal {
+  z-index: 9;
+}
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 700px) {
+  #jessicaWorld .jessica-cards {
+    width: 94%;
+    gap: 8px;
+  }
+
+  #jessicaWorld .jessica-cards .jessica-card {
+    height: 145px;
+    min-height: 145px;
+    padding: 8px 3px;
+    gap: 7px;
+  }
+
+  #jessicaWorld .jessica-card .card-icon {
+    font-size: 24px;
+  }
+
+  #jessicaWorld .jessica-card .card-title {
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+
+  #jessicaWorld .jessica-card .card-subtitle {
+    font-size: 8px;
+  }
+
+  #jessicaWorld .jessica-card-jl .card-date {
+    font-size: 25px;
+  }
+}
+
+/* ===== EFECTO ESPECIAL AL SELECCIONAR RECUERDOS ===== */
+
+#jessicaWorld .jessica-cards .jessica-card {
+  transition:
+    transform .22s ease,
+    border-color .22s ease,
+    box-shadow .22s ease,
+    background .22s ease;
+}
+
+/* Brillo violeta, sin oscurecer la tarjeta */
+#jessicaWorld .jessica-cards .jessica-card:hover,
+#jessicaWorld .jessica-cards .jessica-card:focus-visible {
+  transform: translateY(-5px);
+  background: rgba(35, 24, 78, .96) !important;
+  border-color: #f1d8ff;
+  outline: 1px solid #cda4ff;
+  box-shadow:
+    0 0 8px rgba(225, 190, 255, .9),
+    0 0 20px rgba(166, 100, 255, .7),
+    inset 0 0 15px rgba(166, 100, 255, .12) !important;
+}
+
+/* El icono también brilla */
+#jessicaWorld .jessica-cards .jessica-card .card-icon {
+  transition: filter .22s ease, transform .22s ease;
+}
+
+#jessicaWorld .jessica-cards .jessica-card:hover .card-icon,
+#jessicaWorld .jessica-cards .jessica-card:focus-visible .card-icon {
+  filter: drop-shadow(0 0 7px #d7a3ff);
+  transform: scale(1.12);
+}
+
+/* Pequeño efecto al presionar */
+#jessicaWorld .jessica-cards .jessica-card:active {
+  transform: scale(.98);
+}
+
+/* Mantener el foco del teclado bonito */
+#jessicaWorld .jessica-cards .jessica-card:focus {
+  outline-offset: 3px;
+}
+
+/* ===== RECUERDO DESBLOQUEADO A PANTALLA COMPLETA ===== */
+
+
+/* ===== POPUP A PANTALLA COMPLETA, CONTENIDO EN SU PANEL ===== */
+
+#jessicaWorld #cardPopup {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 100 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+  transform: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: rgba(4, 5, 20, .78) !important;
+  backdrop-filter: blur(5px);
+}
+
+#jessicaWorld #cardPopup.open {
+  display: flex !important;
+  flex-direction: column;
+  animation: memoryFadeIn .35s ease both;
+}
+
+/* Panel violeta que contiene todo */
+#jessicaWorld #cardPopup::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+
+  width: min(720px, 88vw);
+  height: min(390px, 75vh);
+
+  background: rgba(13, 15, 43, .97);
+  border: 2px solid #c5a0ff;
+  box-shadow:
+    0 0 18px rgba(184, 130, 255, .65),
+    inset 0 0 35px rgba(110, 75, 190, .12);
+
+  pointer-events: none;
+}
+
+/* Todos los textos dentro del panel */
+#jessicaWorld #cardPopup #popupLabel,
+#jessicaWorld #cardPopup #popupTitle,
+#jessicaWorld #cardPopup #popupText {
+  position: relative;
+  z-index: 2;
+  width: min(540px, 75vw);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#jessicaWorld #cardPopup #popupLabel {
+  margin: 0 0 18px;
+  color: #d2b5ff;
+  font-size: 12px;
+  letter-spacing: 3px;
+  line-height: 1.8;
+  text-shadow: 0 0 12px #a779ff;
+}
+
+#jessicaWorld #cardPopup #popupTitle {
+  margin: 0 0 22px;
+  color: #fff;
+  font-size: clamp(25px, 3vw, 40px);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 18px rgba(193, 147, 255, .7);
+}
+
+#jessicaWorld #cardPopup #popupText {
+  margin: 0;
+  color: #eee6ff;
+  font-size: clamp(13px, 1.15vw, 17px);
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+
+/* Botón para cerrar */
+#jessicaWorld #cardPopup .popup-close {
+  position: absolute;
+  z-index: 3;
+  top: calc(50% - min(195px, 37.5vh) + 12px);
+  right: calc(50% - min(360px, 44vw) + 12px);
+
+  color: white;
+  background: transparent;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+@keyframes memoryFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 650px) {
+  #jessicaWorld #cardPopup::before {
+    width: 92vw;
+    height: 60vh;
+  }
+
+  #jessicaWorld #cardPopup #popupLabel {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  #jessicaWorld #cardPopup #popupText {
+    width: 78vw;
+    line-height: 1.8;
+  }
+
+  #jessicaWorld #cardPopup .popup-close {
+    top: 22%;
+    right: 8%;
+  }
+}
+
+/* ===== ESCENA ROMÁNTICA FINAL ===== */
+
+#jessicaWorld .final-love-scene {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 18px;
+  color: #f8efff;
+  background:
+    radial-gradient(ellipse at center,
+      rgba(39, 15, 60, .25),
+      rgba(3, 3, 10, .97) 75%),
+    #05040a;
+}
+
+#jessicaWorld .final-love-scene.show {
+  display: flex;
+  animation: finalLoveAppear 1s ease both;
+}
+
+#jessicaWorld .love-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#jessicaWorld .love-stars span {
+  position: absolute;
+  color: #e7caff;
+  font-size: clamp(10px, 1.3vw, 19px);
+  opacity: .65;
+  text-shadow: 0 0 12px #b66aff;
+  animation: starTwinkle 2.5s ease-in-out infinite alternate;
+}
+
+#jessicaWorld .love-stars span:nth-child(1)  { top: 12%; left: 12%; }
+#jessicaWorld .love-stars span:nth-child(2)  { top: 22%; left: 27%; }
+#jessicaWorld .love-stars span:nth-child(3)  { top: 14%; left: 76%; }
+#jessicaWorld .love-stars span:nth-child(4)  { top: 35%; left: 88%; }
+#jessicaWorld .love-stars span:nth-child(5)  { top: 72%; left: 14%; }
+#jessicaWorld .love-stars span:nth-child(6)  { top: 82%; left: 32%; }
+#jessicaWorld .love-stars span:nth-child(7)  { top: 66%; left: 83%; }
+#jessicaWorld .love-stars span:nth-child(8)  { top: 46%; left: 7%; }
+#jessicaWorld .love-stars span:nth-child(9)  { top: 90%; left: 63%; }
+#jessicaWorld .love-stars span:nth-child(10) { top: 28%; left: 61%; }
+#jessicaWorld .love-stars span:nth-child(11) { top: 57%; left: 22%; }
+#jessicaWorld .love-stars span:nth-child(12) { top: 76%; left: 92%; }
+#jessicaWorld .love-stars span:nth-child(13) { top: 8%; left: 48%; }
+#jessicaWorld .love-stars span:nth-child(14) { top: 52%; left: 72%; }
+#jessicaWorld .love-stars span:nth-child(15) { top: 94%; left: 43%; }
+
+#jessicaWorld .final-love-content {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 900px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+}
+
+#jessicaWorld .love-tulips {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, 2vw, 28px);
+  margin-bottom: 22px;
+}
+
+#jessicaWorld .love-tulips span {
+  font-size: clamp(22px, 2.2vw, 34px);
+  animation: tulipFloat 2.5s ease-in-out infinite alternate;
+}
+
+#jessicaWorld .love-tulips span:nth-child(even) {
+  animation-delay: .5s;
+}
+
+#jessicaWorld .beating-heart {
+  color: #ff347c;
+  font-family: Arial, sans-serif;
+  font-size: clamp(76px, 9vw, 124px);
+  line-height: 1.15;
+  margin-bottom: 22px;
+  text-shadow:
+    0 0 12px rgba(255, 40, 120, .85),
+    0 0 35px rgba(255, 40, 120, .5);
+  animation: heartBeat 1.15s ease-in-out infinite;
+}
+
+#jessicaWorld .final-love-eyebrow {
+  margin: 0 0 18px;
+  color: #b8a1c8;
+  font-size: 11px;
+  letter-spacing: 4px;
+}
+
+#jessicaWorld .final-love-message {
+  width: 100%;
+  margin-bottom: 24px;
+  color: #d7d0df;
+  font-size: clamp(13px, 1.1vw, 17px);
+  line-height: 1.9;
+}
+
+#jessicaWorld .final-love-message p {
+  margin: 7px 0;
+}
+
+#jessicaWorld .final-love-content h2 {
+  margin: 8px 0 24px;
+  color: #fff7ff;
+  font-size: clamp(23px, 3vw, 42px);
+  line-height: 1.65;
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px rgba(255, 190, 235, .2);
+}
+
+#jessicaWorld .final-love-signature {
+  margin-top: 8px;
+  color: #c69bdf;
+  font-size: 10px;
+  letter-spacing: 2px;
+  line-height: 1.8;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.13); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.09); }
+  60% { transform: scale(1); }
+}
+
+@keyframes starTwinkle {
+  from { opacity: .25; transform: scale(.85); }
+  to { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes tulipFloat {
+  from { transform: translateY(0); }
+  to { transform: translateY(-5px); }
+}
+
+@keyframes finalLoveAppear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 650px) {
+  #jessicaWorld .final-love-content {
+    width: 100%;
+  }
+
+  #jessicaWorld .love-tulips {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  #jessicaWorld .beating-heart {
+    margin-bottom: 16px;
+  }
+
+  #jessicaWorld .final-love-eyebrow {
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  #jessicaWorld .final-love-message {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  #jessicaWorld .final-love-content h2 {
+    font-size: clamp(20px, 5vw, 30px);
+    line-height: 1.5;
+  }
+
+  #jessicaWorld .final-love-signature {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+}
+
+/* ===== CIELO ESTRELLADO MÁGICO ===== */
+
+#jessicaWorld .love-stars span {
+  animation: romanticTwinkle 2s ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+
+/* Variamos el ritmo para que no brillen todas juntas */
+#jessicaWorld .love-stars span:nth-child(3n) {
+  animation-duration: 1.3s;
+}
+
+#jessicaWorld .love-stars span:nth-child(3n + 1) {
+  animation-duration: 2.8s;
+  animation-delay: .8s;
+}
+
+@keyframes romanticTwinkle {
+  0% {
+    opacity: .15;
+    transform: scale(.7);
+    text-shadow: 0 0 2px #b66aff;
+  }
+  50% {
+    opacity: .65;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.35);
+    text-shadow: 0 0 15px #d8a5ff, 0 0 28px #8d53ff;
+  }
+}
+
+/* ===== ESTRELLAS FUGACES ===== */
+
+#jessicaWorld .shooting-star {
+  position: absolute;
+  z-index: 1;
+  top: var(--star-top, 20%);
+  left: var(--star-left, 80%);
+  width: 150px;
+  height: 2px;
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #dcbaff 35%,
+    #ffffff 100%
+  );
+  box-shadow: 0 0 8px #c79aff, 0 0 18px #9b6bff;
+  transform: rotate(-35deg);
+  transform-origin: right center;
+  animation: shootingStar 1.1s ease-out forwards;
+}
+
+#jessicaWorld .shooting-star::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 12px 3px #d9b6ff;
+}
+
+@keyframes shootingStar {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(-35deg);
+  }
+  12% {
+    opacity: 1;
+  }
+  75% {
+    opacity: .9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-420px, 280px) rotate(-35deg);
+  }
+}
+
+/* ===== UNIVERSO ROMÁNTICO DE JESSICA ===== */
+
+#spaceScene.space-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+ 
+background:
+  radial-gradient(ellipse at 50% 100%,
+    rgba(91, 54, 160, 0.24), transparent 55%),
+  radial-gradient(ellipse at 15% 25%,
+    rgba(69, 72, 170, 0.16), transparent 42%),
+  radial-gradient(ellipse at 85% 35%,
+    rgba(80, 55, 145, 0.13), transparent 45%),
+  linear-gradient(180deg,
+    #03040c 0%,
+    #08091b 55%,
+    #100b24 100%);
+
+}
+
+/* Nebulosas */
+
+#spaceScene .space-nebula {
+  position: absolute;
+  inset: -15%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 25% 35%,
+      rgba(112, 57, 190, .25), transparent 28%),
+    radial-gradient(ellipse at 75% 25%,
+      rgba(50, 94, 205, .23), transparent 30%),
+    radial-gradient(ellipse at 55% 75%,
+      rgba(171, 63, 170, .15), transparent 32%);
+  
+filter: blur(30px);
+animation: nebulaDrift 28s ease-in-out infinite alternate;
+
+}
+
+/* Estrellas del fondo */
+
+#spaceScene .space-stars {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(2px 2px at 8% 17%, white 98%, transparent),
+    radial-gradient(1px 1px at 19% 68%, #b9caff 98%, transparent),
+    radial-gradient(2px 2px at 35% 23%, #e6caff 98%, transparent),
+    radial-gradient(1px 1px at 46% 76%, white 98%, transparent),
+    radial-gradient(2px 2px at 63% 15%, white 98%, transparent),
+    radial-gradient(1px 1px at 76% 59%, #c5caff 98%, transparent),
+    radial-gradient(2px 2px at 89% 32%, #f4d6ff 98%, transparent),
+    radial-gradient(1px 1px at 95% 82%, white 98%, transparent);
+  background-size: 310px 250px;
+  
+animation: starsTwinkle 6s ease-in-out infinite alternate;
+
+}
+
+/* Planetas decorativos */
+
+#spaceScene .space-planet {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+#spaceScene .planet-one {
+  width: clamp(90px, 12vw, 165px);
+  aspect-ratio: 1;
+  top: 9%;
+  right: 11%;
+  background:
+    radial-gradient(circle at 30% 28%,
+      #ffe9c9 0%, #dba7ff 12%, #7954bd 42%,
+      #34265f 72%, #15132e 100%);
+  box-shadow: 0 0 35px rgba(161, 117, 255, .28);
+}
+
+#spaceScene .planet-one::after {
+  content: "";
+  position: absolute;
+  width: 155%;
+  height: 28%;
+  left: -28%;
+  top: 37%;
+  border: 3px solid rgba(211, 185, 255, .65);
+  border-radius: 50%;
+  transform: rotate(-22deg);
+  box-shadow: 0 0 12px rgba(190, 156, 255, .3);
+}
+
+#spaceScene .planet-two {
+  width: clamp(35px, 5vw, 65px);
+  aspect-ratio: 1;
+  bottom: 15%;
+  left: 10%;
+  background:
+    radial-gradient(circle at 30% 25%,
+      #c8f3ff, #5388dc 40%, #25275f 78%);
+  box-shadow: 0 0 25px rgba(95, 157, 255, .3);
+}
+
+/* Contenido central */
+
+#spaceScene .space-content {
+  position: relative;
+  z-index: 2;
+  width: min(88%, 850px);
+  max-height: 92%;
+  overflow-y: auto;
+  margin: 0 auto;
+  padding: clamp(24px, 5vh, 55px) 0;
+  text-align: center;
+  box-sizing: border-box;
+  animation: spaceContentEnter 1.3s ease both;
+}
+
+#spaceScene .space-eyebrow {
+  color: #c5b2ff;
+  font-size: clamp(10px, 1vw, 13px);
+  letter-spacing: 4px;
+  margin-bottom: 18px;
+}
+
+#spaceScene h2 {
+  margin: 0 0 28px;
+  font-size: clamp(36px, 5.5vw, 64px);
+  line-height: 1.08;
+  letter-spacing: 1px;
+  text-shadow: 0 0 20px rgba(166, 131, 255, .55);
+}
+
+#spaceScene .space-message {
+  padding: clamp(22px, 4vw, 42px);
+  background: rgba(8, 10, 33, .68);
+  border: 1px solid rgba(195, 168, 255, .45);
+  box-shadow:
+    0 0 0 4px rgba(93, 68, 153, .08),
+    0 0 35px rgba(123, 92, 255, .15);
+  backdrop-filter: blur(5px);
+}
+
+#spaceScene .space-message p {
+  font-size: clamp(15px, 1.4vw, 19px);
+  line-height: 1.9;
+  color: #e5e0f5;
+  margin: 14px 0;
+}
+
+#spaceScene .space-message .space-greeting {
+  font-size: clamp(23px, 2.5vw, 32px);
+  color: white;
+  margin-top: 0;
+}
+
+#spaceScene .space-message .space-highlight {
+  color: #d2bdff;
+  text-shadow: 0 0 12px rgba(160, 120, 255, .45);
+}
+
+#spaceScene #spaceContinue {
+  margin-top: 22px;
+  padding: 16px 30px;
+  color: white;
+  font-family: monospace;
+  font-size: 14px;
+  letter-spacing: 3px;
+  background: rgba(91, 65, 153, .65);
+  border: 1px solid #c9adff;
+  box-shadow: 0 0 20px rgba(160, 120, 255, .2);
+  cursor: pointer;
+  transition: transform .2s, background .2s, box-shadow .2s;
+}
+
+#spaceScene #spaceContinue:hover {
+  transform: translateY(-3px);
+  background: rgba(126, 91, 205, .8);
+  box-shadow: 0 0 30px rgba(177, 142, 255, .5);
+}
+
+#spaceScene .space-signature {
+  margin-top: 24px;
+  color: #b7a7e8;
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+
+/* Estrella fugaz */
+
+#spaceScene .space-shooting-star {
+  position: absolute;
+  top: 22%;
+  left: 75%;
+  width: 150px;
+  height: 2px;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #c6a6ff, white);
+  box-shadow: 0 0 10px #ad8aff;
+  transform: rotate(-35deg);
+  animation: spaceShootingStar 1.5s ease-out 2s forwards;
+}
+
+@keyframes starsTwinkle {
+  from { opacity: .45; }
+  to { opacity: 1; }
+}
+
+@keyframes nebulaDrift {
+  from { transform: translate(-1%, 0) scale(1); }
+  to { transform: translate(1%, -2%) scale(1.05); }
+}
+
+@keyframes spaceContentEnter {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spaceShootingStar {
+  0% { opacity: 0; transform: translate(0, 0) rotate(-35deg); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-450px, 280px) rotate(-35deg); }
+}
+
+@media (max-width: 650px) {
+  #spaceScene .space-content {
+    width: 92%;
+    padding: 28px 0;
+  }
+
+  #spaceScene .planet-one {
+    top: 4%;
+    right: 3%;
+    opacity: .65;
+  }
+
+  #spaceScene .planet-two {
+    bottom: 5%;
+    left: 3%;
+    opacity: .7;
+  }
+
+  #spaceScene .space-message {
+    padding: 20px 16px;
+  }
+
+  #spaceScene .space-message p {
+    font-size: 14px;
+  }
+}
+
+#finalLoveScene #goToSpace {
+  display: block;
+  margin: 28px auto 0;
+  padding: 16px 26px;
+  color: #fff;
+  background: rgba(160, 100, 255, 0.12);
+  border: 1px solid #d9b5ff;
+  font-family: monospace;
+  font-size: 13px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(180, 110, 255, 0.3);
+  transition: background .25s, transform .25s, box-shadow .25s;
+}
+
+#finalLoveScene #goToSpace:hover {
+  background: rgba(160, 100, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 0 24px rgba(200, 150, 255, 0.65);
+}
+
+/* ===== UNIVERSO ANIMADO J & L ===== */
+
+#finalLoveScene {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  isolation: isolate;
+  background: #020208;
+  color: #fff;
+}
+
+/* Capas de estrellas */
+#finalLoveScene .love-stars {
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 8% 15%, #fff 99%, transparent),
+    radial-gradient(2px 2px at 22% 72%, #b9c9ff 99%, transparent),
+    radial-gradient(1px 1px at 37% 30%, #fff 99%, transparent),
+    radial-gradient(2px 2px at 54% 80%, #d6b8ff 99%, transparent),
+    radial-gradient(1px 1px at 73% 18%, #fff 99%, transparent),
+    radial-gradient(2px 2px at 88% 57%, #b9c9ff 99%, transparent),
+    radial-gradient(1px 1px at 65% 45%, #fff 99%, transparent);
+  background-size: 270px 230px;
+  animation: starDrift 65s linear infinite;
+}
+
+/* Brillo violeta y azul del espacio */
+#finalLoveScene::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 12% 80%,
+      rgba(49, 69, 180, .25), transparent 32%),
+    radial-gradient(ellipse at 88% 22%,
+      rgba(112, 48, 190, .24), transparent 30%),
+    radial-gradient(ellipse at 55% 55%,
+      rgba(32, 40, 100, .12), transparent 45%);
+  animation: nebulaDrift 24s ease-in-out infinite alternate;
+}
+
+/* Segunda capa: estrellas pequeñas en movimiento */
+#finalLoveScene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .55;
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, #fff 99%, transparent),
+    radial-gradient(1px 1px at 45% 65%, #a9baff 99%, transparent),
+    radial-gradient(1px 1px at 78% 35%, #fff 99%, transparent),
+    radial-gradient(2px 2px at 90% 85%, #d6aaff 99%, transparent);
+  background-size: 190px 170px;
+  animation: starDrift 38s linear infinite reverse;
+}
+
+/* Planeta con anillos arriba a la derecha */
+#finalLoveScene .space-planet-one {
+  position: absolute;
+  top: -115px;
+  right: -95px;
+  width: clamp(180px, 23vw, 340px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 28%,
+      #9daaff 0%, #394a9d 22%,
+      #151b48 58%, #03040d 78%);
+  box-shadow:
+    inset -28px -12px 40px #000,
+    0 0 45px rgba(91, 105, 255, .2);
+  opacity: .85;
+  animation: planetFloat 12s ease-in-out infinite alternate;
+}
+
+#finalLoveScene .space-planet-one::before {
+  content: "";
+  position: absolute;
+  width: 155%;
+  height: 35%;
+  left: -28%;
+  top: 38%;
+  border: 7px solid rgba(178, 139, 255, .75);
+  border-left-color: rgba(94, 122, 255, .55);
+  border-right-color: rgba(213, 178, 255, .9);
+  border-radius: 50%;
+  transform: rotate(-24deg);
+  box-shadow: 0 0 15px rgba(165, 121, 255, .4);
+}
+
+/* Planeta grande abajo a la izquierda */
+#finalLoveScene .space-planet-two {
+  position: absolute;
+  width: clamp(220px, 32vw, 470px);
+  aspect-ratio: 1;
+  left: -170px;
+  bottom: -240px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 70% 30%,
+      #626fce, #202c69 36%, #080b20 72%);
+  box-shadow:
+    inset -30px -20px 60px #000,
+    12px -8px 35px rgba(94, 110, 255, .25);
+  opacity: .8;
+  animation: planetFloat 16s ease-in-out infinite alternate-reverse;
+}
+
+/* Estrellas fugaces creadas con CSS */
+#finalLoveScene .shooting-star {
+  position: absolute;
+  top: 12%;
+  left: 65%;
+  width: 130px;
+  height: 2px;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    transparent, #9cbaff, #fff);
+  box-shadow: 0 0 10px #8caaff;
+  transform: rotate(-35deg);
+  animation: shootingStar 7s linear infinite;
+}
+
+#finalLoveScene .shooting-star-two {
+  top: 45%;
+  left: 20%;
+  width: 95px;
+  animation-delay: 3.8s;
+  animation-duration: 9s;
+}
+
+/* Mantener el mensaje por encima de los efectos */
+#finalLoveScene .final-love-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Animaciones */
+@keyframes starDrift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-100px, 70px, 0); }
+}
+
+@keyframes nebulaDrift {
+  from { transform: translate(-2%, 1%) scale(1); }
+  to { transform: translate(3%, -2%) scale(1.08); }
+}
+
+@keyframes planetFloat {
+  from { transform: translateY(0); }
+  to { transform: translateY(16px); }
+}
+
+@keyframes shootingStar {
+  0%, 60% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(-35deg);
+  }
+  63% { opacity: 1; }
+  78% {
+    opacity: 0;
+    transform: translate(-420px, 270px) rotate(-35deg);
+  }
+  100% { opacity: 0; }
+}
+
+/* Respetar la preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  #finalLoveScene *,
+  #finalLoveScene::before,
+  #finalLoveScene::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* GALAXIA DE NUESTRO SIGUIENTE CAPÍTULO */
+#spaceScene.space-scene {
+  position: absolute;
+  isolation: isolate;
+  overflow: hidden;
+
+  background-color: #020208;
+  background-image: url("assets/space-background.png");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* Oscurecimiento suave para mantener el texto legible */
+#spaceScene.space-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: rgba(2, 2, 12, 0.12);
+}
+
+
+/* GALAXIA: NUESTRO SIGUIENTE CAPÍTULO */
+#spaceScene.space-scene {
+  position: absolute;
+  isolation: isolate;
+  overflow: hidden;
+
+  background: #020208 url("./assets/space-background.png")
+    center center / cover no-repeat !important;
+}
+
+/* Mantener el texto por encima de la galaxia */
+#spaceScene .space-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== ÚLTIMA ESCENA: MÍRAME A MÍ ===== */
+#cameraScene.camera-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at center,
+      rgba(30, 12, 19, .28), transparent 65%),
+    #080708;
+  color: #f2eeee;
+  font-family: monospace;
+}
+
+/* Textura de pantalla retro */
+#cameraScene .camera-scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .22;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.025) 0px,
+      rgba(255,255,255,.025) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      rgba(255,255,255,.012) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  animation: cameraFlicker 5s infinite;
+}
+
+#cameraScene .camera-content {
+  position: relative;
+  z-index: 1;
+  width: min(92%, 1000px);
+  min-height: 100%;
+  margin: auto;
+  box-sizing: border-box;
+  padding: 12vh 0 8vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#cameraScene .camera-status {
+  margin: 0 0 24px;
+  color: #a94450;
+  font-size: 10px;
+  letter-spacing: 7px;
+  animation: signalPulse 3s ease-in-out infinite;
+}
+
+#cameraScene .camera-heart {
+  color: #e63870;
+  font-size: 76px;
+  line-height: 1;
+  margin-bottom: 24px;
+  text-shadow:
+    0 0 12px rgba(255, 40, 110, .65),
+    0 0 36px rgba(255, 20, 90, .32);
+  animation: heartBeat 2s ease-in-out infinite;
+}
+
+#cameraScene h2 {
+  max-width: 100%;
+  margin: 0 0 18px;
+  font-size: clamp(25px, 3vw, 48px);
+  line-height: 1.25;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-shadow: 0 0 14px rgba(255,255,255,.08);
+}
+
+#cameraScene .camera-instruction {
+  margin: 0;
+  color: #bcb6b8;
+  font-size: 13px;
+  letter-spacing: .3px;
+}
+
+#cameraScene .camera-divider {
+  width: min(370px, 75%);
+  height: 1px;
+  margin: 32px 0 26px;
+  background: rgba(210, 195, 200, .3);
+}
+
+#cameraScene .camera-message {
+  margin: 7px 0;
+  color: #aaa3a7;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+#cameraScene .camera-signature {
+  display: flex;
+  gap: 30px;
+  margin-top: 25px;
+  color: #7194ff;
+  font-size: 19px;
+  letter-spacing: 3px;
+  text-shadow: 0 0 12px rgba(75, 115, 255, .22);
+}
+
+#cameraScene .camera-signature span {
+  color: #8ba6ff;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  12% { transform: scale(1.08); }
+  24% { transform: scale(1); }
+  36% { transform: scale(1.12); }
+  50% { transform: scale(1); }
+}
+
+@keyframes cameraFlicker {
+  0%, 96%, 100% { opacity: .22; }
+  97% { opacity: .12; }
+  98% { opacity: .28; }
+}
+
+@keyframes signalPulse {
+  0%, 100% { opacity: .55; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  #cameraScene .camera-content {
+    padding: 10vh 0 7vh;
+  }
+
+  #cameraScene .camera-heart {
+    font-size: 64px;
+  }
+
+  #cameraScene h2 {
+    font-size: clamp(25px, 7vw, 36px);
+  }
+
+  #cameraScene .camera-status {
+    letter-spacing: 4px;
+  }
+}
+
+/* ===== ESTÁTICA RETRO PARA LA ESCENA FINAL ===== */
+
+#cameraScene.camera-scene {
+  background-color: #080708;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.025) 0px,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(
+      ellipse at center,
+      #100b0e 0%,
+      #080708 72%
+    );
+}
+
+/* Grano y ruido de monitor */
+#cameraScene .camera-scanlines {
+  z-index: 0;
+  opacity: 0.32;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(255, 255, 255, 0.045) 1px,
+      transparent 2px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.018) 0px,
+      transparent 1px,
+      transparent 3px
+    );
+  animation: cameraStatic 0.16s steps(3) infinite;
+}
+
+/* Letras más grandes */
+#cameraScene .camera-content {
+  width: min(94%, 1150px);
+}
+
+#cameraScene .camera-status {
+  font-size: 12px;
+  letter-spacing: 8px;
+  margin-bottom: 28px;
+}
+
+#cameraScene .camera-heart {
+  font-size: 88px;
+}
+
+#cameraScene h2 {
+  font-size: clamp(30px, 4vw, 58px);
+  margin-bottom: 22px;
+}
+
+#cameraScene .camera-instruction {
+  font-size: 16px;
+}
+
+#cameraScene .camera-message {
+  font-size: 15px;
+}
+
+#cameraScene .camera-signature {
+  font-size: 23px;
+  margin-top: 30px;
+}
+
+/* Movimiento irregular de la estática */
+@keyframes cameraStatic {
+  0%   { transform: translate(0, 0); opacity: .24; }
+  25%  { transform: translate(-1%, 1%); opacity: .38; }
+  50%  { transform: translate(1%, -1%); opacity: .28; }
+  75%  { transform: translate(-1%, -1%); opacity: .42; }
+  100% { transform: translate(1%, 1%); opacity: .30; }
+}
+
+@media (max-width: 600px) {
+  #cameraScene .camera-status {
+    font-size: 10px;
+    letter-spacing: 5px;
+  }
+
+  #cameraScene .camera-heart {
+    font-size: 72px;
+  }
+
+  #cameraScene h2 {
+    font-size: clamp(27px, 7.5vw, 38px);
+  }
+
+  #cameraScene .camera-instruction,
+  #cameraScene .camera-message {
+    font-size: 14px;
+  }
+}
+

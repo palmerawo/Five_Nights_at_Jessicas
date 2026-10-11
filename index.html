@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Five Nights at Jessica's</title><link rel="stylesheet" href="style.css">
+</head><body>
+<main class="game">
+<div class="background"></div><div class="vignette"></div><div class="scanlines"></div><div class="static" id="static"></div>
+<header class="hud"><div>CAM 01 - PIZZERIA<br><span id="clock">12:00 AM</span></div><div>FAZBEAR ENTERTAINMENT<br><span>REGISTRO ESPECIAL</span></div></header>
+<section id="title" class="scene active">
+<div class="title-panel"><p class="eyebrow">FAZBEAR ENTERTAINMENT // ARCHIVO 011</p>
+<h1>FIVE NIGHTS AT<br><span>JESSICA'S</span></h1><div class="divider"><i></i>♥<i></i></div>
+<p class="subtitle">UN LUGAR ESPECIAL...<br>PARA ALGUIEN MUY ESPECIAL.</p>
+<button class="menu selected" id="newGame">▶ NEW GAME</button><button class="menu" id="continue">▶ CONTINUE</button><button class="menu" id="options">▶ OPTIONS</button>
+</div>
+<div class="footer left">SECURITY SYSTEM<br>v1.0.0<br>J &amp; L</div><div class="footer right">GRACIAS POR ESTAR AQUÍ... <b>♥</b></div>
+</section>
+<section id="glitch" class="scene glitch">
+  <img
+    src="assets/signal-lost.png"
+    class="signal-lost-image"
+    alt="Señal perdida"
+  >
+</section>
+
+
+<section id="bonnieScene" class="scene bonnie-scene">
+
+  <div class="frame">
+    <span>CAM 01 // MOVIMIENTO DETECTADO</span>
+  </div>
+
+  <div class="bonnie bonnie-image" id="bonnie">
+    <img
+      src="assets/bonnie-normal.png"
+      alt="Bonnie, animatrónico morado"
+      class="bonnie-sprite"
+    >
+  </div>
+
+  <div class="dialogue">
+
+    <div class="dialogue-portrait">
+      <img src="assets/bonnie-normal.png" alt="Bonnie">
+    </div>
+
+    <div class="dialogue-content">
+      <div class="speaker">
+        <b>BONNIE</b>
+        <span>● EN LÍNEA</span>
+      </div>
+
+      <p id="dialogueText"></p>
+
+      <button id="next" type="button">▼</button>
+    </div>
+
+  </div>
+
+  <div class="footer left">
+    CAM 01<br>SEÑAL INESTABLE
+  </div>
+
+  <div class="footer right">
+    NO APAGUES LA PANTALLA ♥
+  </div>
+
+</section>
+
+
+
+<section id="nextScene" class="scene next-scene">
+
+  <div class="ending-glitch"></div>
+
+  <div class="ending-content">
+    <p class="ending-label">FAZBEAR ENTERTAINMENT // ERROR 011</p>
+
+    <h2 id="endingTitle">ESPERA, JESSICA...</h2>
+
+    <p id="endingText">
+      No todas las historias terminan cuando se apaga la pantalla.
+
+    </p>
+
+    <div class="ending-cursor">_</div>
+  </div>
+
+  <div class="ending-footer">
+    CONEXIÓN INTERRUMPIDA // CAM 01
+  </div>
+
+</section>
+
+<section id="jessicaWorld" class="scene jessica-world">
+    
+<div id="storyIntro" class="story-intro">
+  <div class="story-text">
+    <p class="story-eyebrow">ARCHIVO J&amp;L // EL COMIENZO</p>
+
+    <p class="story-line">En nuestro caso había algo diferente:</p>
+
+    <p class="story-line story-distance">kilómetros.</p>
+
+    <p class="story-line story-ending">
+      Dos países. Dos vidas.<br>
+      Una historia que estaba empezando.
+    </p>
+
+    <button id="storyContinue" type="button">
+      CONTINUAR ♥ 
+    </button>
+  </div>
+</div>
+
+    
+
+<img
+  src="assets/jessica-world-clean.png"
+  class="jessica-background"
+  alt="Jardín pixel art nocturno de Jessica"
+>
+
+
+  <div class="pixel-sky">
+    <span class="pixel-star star-one">✦</span>
+    <span class="pixel-star star-two">✧</span>
+    <span class="pixel-star star-three">✦</span>
+    <span class="pixel-star star-four">✧</span>
+    <div class="pixel-moon"></div>
+  </div>
+
+  <div class="world-heading">
+    <p>UN NUEVO MUNDO // ARCHIVO J&L</p>
+    <h2>BIENVENIDA A TU MUNDO</h2>
+    <span>Un pequeño lugar hecho con mucho cariño ♡</span>
+  </div>
+  
+
+<div class="jessica-cards">
+
+  <button class="jessica-card" data-card="bonnie">
+    <span class="card-icon">🐰</span>
+    <span class="card-title">BONNIE</span>
+    <span class="card-subtitle">Tu favorito</span>
+  </button>
+
+  <button class="jessica-card" data-card="morat">
+    <span class="card-icon">♫</span>
+    <span class="card-title">MORAT</span>
+    <span class="card-subtitle">Una canción, un recuerdo</span>
+  </button>
+
+  <button class="jessica-card" data-card="tulips">
+    <span class="card-icon">🌷</span>
+    <span class="card-title">TULIPANES</span>
+    <span class="card-subtitle">Un detalle para ti</span>
+  </button>
+   
+<button class="jessica-card jessica-card-jl" data-card="jl">
+  <span class="card-date">11/01</span>
+  <span class="card-title">J &amp; L</span>
+  <span class="card-icon">❤️</span>
+  <span class="card-subtitle">Nuestro comienzo</span>
+</button>
+
+
+</div>
+
+<div id="cardPopup" class="card-popup" aria-live="polite">
+  <button id="closeCardPopup" class="popup-close" type="button">×</button>
+  <p id="popupLabel">ARCHIVO DESBLOQUEADO</p>
+  <h3 id="popupTitle"></h3>
+  <p id="popupText"></p>
+</div>
+
+
+  <div class="pixel-hills"></div>
+
+  <div class="pixel-garden">
+    <div class="flower flower-a">🌷</div>
+    <div class="flower flower-b">🌼</div>
+    <div class="flower flower-c">🌷</div>
+    <div class="flower flower-d">🌼</div>
+    <div class="flower flower-e">🌷</div>
+    <div class="flower flower-f">🌼</div>
+    <div class="flower flower-g">🌷</div>
+    <div class="flower flower-h">🌼</div>
+
+    <div class="pixel-path"></div>
+
+    <button id="heartReveal" class="pixel-heart" type="button"
+      aria-label="Descubrir el corazón">
+      ♥
+    </button>
+
+    <p class="heart-hint">HAY ALGO ESPERÁNDOTE...</p>
+  </div>
+
+  <div id="loveMessage" class="love-message">
+    <p>ARCHIVO ESPECIAL DESBLOQUEADO</p>
+    <h3>J &amp; L ♥</h3>
+    <span>Y esto es solo el comienzo de nuestra aventura...</span>
+    <button id="closeLoveMessage" type="button">CONTINUAR ♥</button>
+  </div>
+
+  <div class="world-footer">JESSICA'S WORLD · EST. 11/01</div>
+  
+<div id="finalLoveScene" class="final-love-scene">
+
+  <div class="love-stars" aria-hidden="true">
+    <span>✦</span><span>·</span><span>✧</span>
+    <span>·</span><span>✦</span><span>✧</span>
+    <span>·</span><span>✦</span><span>·</span>
+    <span>✧</span><span>·</span><span>✦</span>
+    <span>·</span><span>✧</span><span>·</span>
+  </div>
+  <div class="space-planet-one" aria-hidden="true"></div>
+<div class="space-planet-two" aria-hidden="true"></div>
+<div class="shooting-star" aria-hidden="true"></div>
+<div class="shooting-star shooting-star-two" aria-hidden="true"></div>
+
+  <div class="final-love-content">
+
+    <div class="love-tulips" aria-label="Cinco tulipanes">
+      <span>🌷</span>
+      <span>🌷</span>
+      <span>🌷</span>
+      <span>🌷</span>
+      <span>🌷</span>
+    </div>
+
+    <div class="beating-heart" aria-label="Corazón latiendo">♥</div>
+
+    <p class="final-love-eyebrow">PRIVATE MESSAGE // J &amp; L</p>
+
+    <div class="final-love-message">
+      <p>Había kilómetros entre nosotros...</p>
+      <p>pero de alguna forma lograste sentirte cerca.</p>
+      <p>Y entre llamadas, mensajes, risas y noches hablando...</p>
+    </div>
+
+    <h2>
+      te convertiste en alguien<br>
+      demasiado especial para mí.
+    </h2>
+
+    <p class="final-love-signature">
+      J &amp; L ♥ · UNA HISTORIA QUE SIGUE ESCRIBIÉNDOSE
+    </p>
+
+ <!-- BOTÓN PARA ABRIR EL CAPÍTULO ESPACIAL -->
+<button id="goToSpace" type="button">
+  ABRIR EL SIGUIENTE CAPÍTULO ♥
+</button>
+
+</div>
+</div>
+
+
+</section>
+
+<!-- ===== NUEVO CAPÍTULO: NUESTRO UNIVERSO ===== -->
+<section id="spaceScene" class="scene space-scene">
+
+  <div class="space-nebula"></div>
+  <div class="space-stars" aria-hidden="true"></div>
+  <div class="space-planet planet-one"></div>
+  <div class="space-planet planet-two"></div>
+  <div class="space-shooting-star"></div>
+
+  <div class="space-content">
+    <p class="space-eyebrow">FINAL RECORDING // 11 · 01</p>
+
+    <h2>Nuestro siguiente<br>capítulo</h2>
+
+    <div class="space-message">
+      <p class="space-greeting">Jessica...</p>
+
+      <p>Hay algo que no quería esconder detrás de una pantalla, de un juego o de una página.</p>
+
+      <p>Quería que todo esto te llevara hasta una sola pregunta.</p>
+
+      <p class="space-highlight">Porque una página puede contar una historia...</p>
+
+      <p>pero hay cosas que solamente quiero decirte yo.</p>
+
+      <button id="spaceContinue" type="button">
+        CONTINUAR ♥
+      </button>
+    </div>
+
+    <p class="space-signature">J &amp; L · BAJO EL MISMO CIELO ♡</p>
+  </div>
+
+</section>
+
+<!-- ===== ÚLTIMA ESCENA: MÍRAME A MÍ ===== -->
+<section id="cameraScene" class="scene camera-scene">
+  <div class="camera-scanlines" aria-hidden="true"></div>
+  <div class="camera-content">
+    <p class="camera-status">SIGNAL LOST...</p>
+
+    <div class="camera-heart" aria-hidden="true">♥</div>
+
+    <h2>Ahora quiero que me mires a mí.</h2>
+
+    <p class="camera-instruction">
+      Prende tu cámara cuando estés lista.
+    </p>
+
+    <div class="camera-divider"></div>
+
+    <p class="camera-message">
+      La última parte de esta noche no está aquí.
+    </p>
+    <p class="camera-message">Está contigo y conmigo.</p>
+
+    <div class="camera-signature">J <span>&amp;</span> L</div>
+  </div>
+</section>
+
+<div id="modal" class="modal"><div class="modal-card"><button id="close">×</button><p class="eyebrow">SISTEMA DE SEGURIDAD</p><h2>OPTIONS</h2><p>Ajusta los sonidos y prepárate para una experiencia especial.</p><label><input type="checkbox" id="sound" checked> ACTIVAR SONIDOS RETRO</label><button id="okay">ACEPTAR</button></div></div><div id="toast" class="toast"></div>
+
+<audio id="fnafMusic" src="audio/fnaf-theme.mp3" loop preload="auto"></audio>
+
+<audio id="romanticMusic" src="audio/romantic.mp3" loop preload="auto"></audio>
+
+</main><script src="script.js"></script></body></html>
